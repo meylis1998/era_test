@@ -95,6 +95,7 @@ class ThemeToggleButton extends StatelessWidget {
           ],
           child: Container(
             margin: const EdgeInsets.all(8),
+            alignment: Alignment.center,
             decoration: BoxDecoration(
               color: colorScheme.surface.withValues(alpha: 0.9),
               borderRadius: BorderRadius.circular(16),
