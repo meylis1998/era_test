@@ -7,7 +7,9 @@ import '../../features/posts/data/datasources/posts_remote_data_source.dart';
 import '../../features/posts/data/repositories/posts_repository_impl.dart';
 import '../../features/posts/domain/repositories/posts_repository.dart';
 import '../../features/posts/domain/usecases/get_posts.dart';
+import '../../features/posts/domain/usecases/get_post.dart';
 import '../../features/posts/presentation/bloc/posts_bloc.dart';
+import '../../features/posts/presentation/bloc/post_detail_bloc.dart';
 import '../network/network_info.dart';
 
 final sl = GetIt.instance;
@@ -20,9 +22,15 @@ Future<void> init() async {
       getPosts: sl(),
     ),
   );
+  sl.registerFactory(
+    () => PostDetailBloc(
+      getPost: sl(),
+    ),
+  );
 
   // Use cases
   sl.registerLazySingleton(() => GetPosts(sl()));
+  sl.registerLazySingleton(() => GetPost(sl()));
 
   // Repository
   sl.registerLazySingleton<PostsRepository>(

@@ -11,16 +11,21 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   PostsBloc({required this.getPosts}) : super(PostsInitial()) {
     on<GetPostsEvent>(_onGetPosts);
     on<RefreshPostsEvent>(_onRefreshPosts);
+    on<SearchPostsEvent>(_onSearchPosts);
   }
 
   final GetPosts getPosts;
+  List<Post>? _allPosts;
 
   Future<void> _onGetPosts(GetPostsEvent event, Emitter<PostsState> emit) async {
     emit(PostsLoading());
     final failureOrPosts = await getPosts();
     failureOrPosts.fold(
       (failure) => emit(PostsError(message: _mapFailureToMessage(failure))),
-      (posts) => emit(PostsLoaded(posts: posts)),
+      (posts) {
+        _allPosts = posts;
+        emit(PostsLoaded(posts: posts, allPosts: posts));
+      },
     );
   }
 
@@ -28,8 +33,32 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     final failureOrPosts = await getPosts();
     failureOrPosts.fold(
       (failure) => emit(PostsError(message: _mapFailureToMessage(failure))),
-      (posts) => emit(PostsLoaded(posts: posts)),
+      (posts) {
+        _allPosts = posts;
+        emit(PostsLoaded(posts: posts, allPosts: posts));
+      },
     );
+  }
+
+  void _onSearchPosts(SearchPostsEvent event, Emitter<PostsState> emit) {
+    if (_allPosts == null) return;
+
+    final query = event.query.toLowerCase().trim();
+
+    if (query.isEmpty) {
+      emit(PostsLoaded(posts: _allPosts!, allPosts: _allPosts!));
+      return;
+    }
+
+    final filteredPosts = _allPosts!
+        .where((post) => post.title.toLowerCase().contains(query))
+        .toList();
+
+    emit(PostsLoaded(
+      posts: filteredPosts,
+      allPosts: _allPosts!,
+      searchQuery: query,
+    ));
   }
 
   String _mapFailureToMessage(Failure failure) {

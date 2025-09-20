@@ -12,12 +12,20 @@ class PostsInitial extends PostsState {}
 class PostsLoading extends PostsState {}
 
 class PostsLoaded extends PostsState {
-  const PostsLoaded({required this.posts});
+  const PostsLoaded({
+    required this.posts,
+    this.allPosts,
+    this.searchQuery = '',
+  });
 
   final List<Post> posts;
+  final List<Post>? allPosts;
+  final String searchQuery;
+
+  bool get isSearching => searchQuery.isNotEmpty;
 
   @override
-  List<Object> get props => [posts];
+  List<Object> get props => [posts, allPosts ?? [], searchQuery];
 }
 
 class PostsError extends PostsState {

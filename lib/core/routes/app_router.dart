@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
 import '../../features/posts/presentation/pages/posts_page.dart';
 import '../../features/posts/presentation/pages/post_detail_page.dart';
-import '../../features/posts/domain/entities/post.dart';
 import 'app_routes.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -18,8 +17,8 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.postDetail,
       builder: (context, state) {
-        final post = state.extra as Post;
-        return PostDetailPage(post: post);
+        final postId = int.parse(state.pathParameters['id']!);
+        return PostDetailPage(postId: postId);
       },
     ),
   ],

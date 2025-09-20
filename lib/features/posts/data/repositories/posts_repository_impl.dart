@@ -37,4 +37,26 @@ class PostsRepositoryImpl implements PostsRepository {
       return Left(NetworkFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, Post>> getPost(int id) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final remotePost = await RetryHelper.retry(
+          () => remoteDataSource.getPost(id),
+          maxAttempts: 3,
+          baseDelay: const Duration(seconds: 1),
+        );
+        return Right(remotePost);
+      } on ServerException {
+        return Left(ServerFailure());
+      } on NetworkException {
+        return Left(NetworkFailure());
+      } catch (e) {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
 }

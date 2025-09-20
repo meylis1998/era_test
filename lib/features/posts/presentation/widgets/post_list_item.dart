@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../domain/entities/post.dart';
-import '../../../../core/routes/app_routes.dart';
 
 class PostListItem extends StatelessWidget {
   const PostListItem({super.key, required this.post});
@@ -35,7 +34,7 @@ class PostListItem extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: () {
-            context.push(AppRoutes.postDetail, extra: post);
+            context.push('/post-detail/${post.id}');
           },
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -115,7 +114,7 @@ class PostListItem extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    post.body,
+                    post.body.replaceAll('\\n', '\n'),
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                       height: 1.4,

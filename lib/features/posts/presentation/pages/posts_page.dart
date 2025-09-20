@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/di/injection_container.dart';
 import '../bloc/posts_bloc.dart';
 import '../widgets/post_list_item.dart';
+import '../widgets/search_bar_widget.dart';
 
 class PostsPage extends StatelessWidget {
   const PostsPage({super.key});
@@ -183,6 +184,27 @@ class _PostsBodyState extends State<PostsBody> with TickerProviderStateMixin {
                 backgroundColor: colorScheme.surface,
                 child: CustomScrollView(
                   slivers: [
+                    // Search bar
+                    const SliverToBoxAdapter(
+                      child: SearchBarWidget(),
+                    ),
+                    // Search results info
+                    if (state.isSearching)
+                      SliverToBoxAdapter(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            state.posts.isEmpty
+                                ? 'No posts found for "${state.searchQuery}"'
+                                : '${state.posts.length} post${state.posts.length == 1 ? '' : 's'} found for "${state.searchQuery}"',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                      ),
                     // Posts list
                     SliverList(
                       delegate: SliverChildBuilderDelegate((context, index) {
