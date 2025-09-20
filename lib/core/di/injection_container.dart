@@ -11,6 +11,7 @@ import '../../features/posts/domain/usecases/get_post.dart';
 import '../../features/posts/presentation/bloc/posts_bloc.dart';
 import '../../features/posts/presentation/bloc/post_detail_bloc.dart';
 import '../network/network_info.dart';
+import '../theme/bloc/theme_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -27,6 +28,9 @@ Future<void> init() async {
       getPost: sl(),
     ),
   );
+
+  // Core - Theme
+  sl.registerLazySingleton(() => ThemeBloc());
 
   // Use cases
   sl.registerLazySingleton(() => GetPosts(sl()));

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/di/injection_container.dart';
+import '../../../../core/theme/widgets/theme_toggle_button.dart';
 import '../../domain/entities/post.dart';
 import '../bloc/post_detail_bloc.dart';
 
@@ -50,7 +52,7 @@ class PostDetailPage extends StatelessWidget {
             ),
           ),
           child: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => context.pop(),
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
               color: colorScheme.onSurface,
@@ -148,7 +150,7 @@ class PostDetailPage extends StatelessWidget {
             ),
           ),
           child: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => context.pop(),
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
               color: colorScheme.onSurface,
@@ -272,7 +274,7 @@ class PostDetailPage extends StatelessWidget {
             ],
           ),
           child: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => context.pop(),
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
               color: colorScheme.onSurface,
@@ -282,7 +284,7 @@ class PostDetailPage extends StatelessWidget {
         ),
         actions: [
           Container(
-            margin: const EdgeInsets.only(right: 16),
+            margin: const EdgeInsets.only(right: 8),
             decoration: BoxDecoration(
               color: colorScheme.surface.withValues(alpha: 0.9),
               borderRadius: BorderRadius.circular(16),
@@ -298,6 +300,7 @@ class PostDetailPage extends StatelessWidget {
               ),
             ),
           ),
+          const ThemeToggleButton(),
         ],
       ),
       body: Container(
