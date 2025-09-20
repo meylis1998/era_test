@@ -41,22 +41,29 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   }
 
   void _onSearchPosts(SearchPostsEvent event, Emitter<PostsState> emit) {
-    if (_allPosts == null) return;
+    List<Post>? allPosts = _allPosts;
+
+    // If _allPosts is null, try to get it from current state
+    if (allPosts == null && state is PostsLoaded) {
+      allPosts = (state as PostsLoaded).allPosts;
+    }
+
+    if (allPosts == null) return;
 
     final query = event.query.toLowerCase().trim();
 
     if (query.isEmpty) {
-      emit(PostsLoaded(posts: _allPosts!, allPosts: _allPosts!));
+      emit(PostsLoaded(posts: allPosts, allPosts: allPosts));
       return;
     }
 
-    final filteredPosts = _allPosts!
+    final filteredPosts = allPosts
         .where((post) => post.title.toLowerCase().contains(query))
         .toList();
 
     emit(PostsLoaded(
       posts: filteredPosts,
-      allPosts: _allPosts!,
+      allPosts: allPosts,
       searchQuery: query,
     ));
   }
@@ -64,13 +71,13 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   String _mapFailureToMessage(Failure failure) {
     switch (failure.runtimeType) {
       case ServerFailure:
-        return 'Server is temporarily unavailable.\nPlease try again later.';
+        return 'Server is temporarily unavailable.\\nPlease try again later.';
       case CacheFailure:
-        return 'Local storage error.\nPlease try again.';
+        return 'Local storage error.\\nPlease try again.';
       case NetworkFailure:
-        return 'No internet connection.\nCheck your network and try again.';
+        return 'No internet connection.\\nCheck your network and try again.';
       default:
-        return 'Something went wrong.\nPlease try again.';
+        return 'Something went wrong.\\nPlease try again.';
     }
   }
 }

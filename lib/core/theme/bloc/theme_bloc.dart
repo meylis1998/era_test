@@ -17,8 +17,11 @@ class ThemeBloc extends HydratedBloc<ThemeEvent, ThemeState> {
   @override
   ThemeState? fromJson(Map<String, dynamic> json) {
     try {
+      if (!json.containsKey('themeMode')) return null;
       final themeModeIndex = json['themeMode'] as int?;
-      final themeMode = ThemeMode.values[themeModeIndex ?? 0];
+      if (themeModeIndex == null) return null;
+      if (themeModeIndex < 0 || themeModeIndex >= ThemeMode.values.length) return null;
+      final themeMode = ThemeMode.values[themeModeIndex];
       return ThemeState(themeMode: themeMode);
     } catch (e) {
       return null;
